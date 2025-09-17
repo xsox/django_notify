@@ -1,8 +1,8 @@
 import os
 from celery import Celery
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "shop.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_notify.settings.local")
 
-app = Celery("djshop")
+app = Celery("django_notify")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
