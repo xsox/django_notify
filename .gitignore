@@ -1,0 +1,13 @@
+*.swp
+*.swo
+*.bak
+*.xz
+*~
+.env
+/.venv/
+*.sqlite3
+django_notify/settings/local.py
+/static/
+
+# PyCharm
+.idea/
