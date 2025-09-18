@@ -18,7 +18,7 @@ class NotificationAdmin(admin.ModelAdmin):
     
     
     def send_notification(self, request, queryset):
-        notify = queryset.objects.first()
+        notify = queryset[0]
         send_notification_task.apply_async(
             args=[notify.pk],
         )

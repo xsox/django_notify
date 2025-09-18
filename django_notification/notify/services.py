@@ -1,6 +1,8 @@
 from django.core.mail import send_mail
 from django.conf import settings
 import requests
+from twilio.rest import Client
+
 
 class NotificationService:
     @staticmethod
@@ -17,8 +19,8 @@ class NotificationService:
         send_mail(
             subject="Уведомление",
             message=notification.message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[notification.user.email],
+            from_email="xwhitesox@yandex.ru",
+            recipient_list=["xwhitesox@yandex.ru", ],
             fail_silently=False,
         )
         notification.is_sent = True
@@ -26,6 +28,13 @@ class NotificationService:
 
     @staticmethod
     def send_sms(notification):
+        client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+        url = "https://sms.ru/sms/send"
+        message = client.messages.create(
+            to=notification.user.phone_number,
+            from_=settings.TWILIO_PHONE_NUMBER,
+            body=notification.message,
+        )
         print(f"[SMS] Отправка на {notification.user.profile.phone_number}: {notification.message}")
         notification.is_sent = True
         notification.save()
