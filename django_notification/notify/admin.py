@@ -11,15 +11,10 @@ class NotificationAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at",)
     actions = ["mark_as_sent", "send_notification"]
 
-    def mark_as_sent(self, request, queryset):
-        updated = queryset.update(is_sent=True)
-        self.message_user(request, f"{updated} уведомление(й) помечено(ы) как отправленные")
-    mark_as_sent.short_description = "Пометить выбранные уведомления как отправленные"
-    
-    
     def send_notification(self, request, queryset):
-        notify = queryset[0]
-        send_notification_task.apply_async(
-            args=[notify.pk],
-        )
+        for notification in queryset:
+            send_notification_task.apply_async(
+                args=[notification.pk],
+            )
+
     send_notification.short_description = "Отправить"
